@@ -1,0 +1,59 @@
+Binary search, also known as the binary search algorithm, is a powerful technique to find a specific value, the target element, in a sorted list or array.
+It employs a divide-and-conquer strategy, repeatedly dividing the search interval in half using the binary search method until the target value is found or the interval becomes empty.
+By comparing the target value with the middle element of the current interval, the binary search algorithm efficiently eliminates the need to examine every element.
+This process continues until the target value is located or it is determined that the value does not exist in the list.
+
+
+
+#include <iostream>
+using namespace std;
+
+// Function to perform binary search
+// Parameters:
+// - number: the value to search for
+// - a: the sorted array to search within
+// - size: the size of the array
+// - first indicates to first index
+// - last indicates to last index
+// - mid indicates to middle index which will be defined in the implementaion
+// Returns:
+// - The index of the number if found, or -1 if not found
+int BinarySearch(int number, const int a[], int size) {
+    int first = 0, last = size - 1; // Initialize the start and end indices
+
+    // Continue searching while the segment to search is valid
+    while (first <= last) {
+        int mid = first + (last - first) / 2; // Calculate the mid-point to avoid overflow
+
+        // Check if the mid-point is the number we are searching for
+        if (a[mid] == number) {
+            return mid; // Number found, return the index
+        }
+        // If the number is smaller, it can only be in the left subarray
+        else if (a[mid] > number) {
+            last = mid - 1;
+        }
+        // If the number is larger, it can only be in the right subarray
+        else {
+            first = mid + 1;
+        }
+    }
+    return -1; // Number not found, return -1
+}
+int main() {
+    int a[5] = { 1, 4, 6, 11, 30 }; // Example sorted array
+    int number_to_search = 11; // Number we are searching for
+
+    // Call BinarySearch and store the result index
+    int index = BinarySearch(number_to_search, a, 5);
+
+    // Check if the number was found and print the appropriate message
+    if (index != -1) {
+        cout << "The index of number " << number_to_search << " is: " << index << endl;
+    }
+    else {
+        cout << "Number " << number_to_search << " not found." << endl;
+    }
+
+    return 0; // Indicate that the program ended successfully
+}

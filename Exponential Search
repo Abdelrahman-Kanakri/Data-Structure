@@ -1,0 +1,52 @@
+Exponential search is an advanced algorithm for locating a specific value in a sorted list or array.
+It combines the power of logarithmic search and the efficiency of range determination to find the target value effectively.
+
+#include <iostream>
+using namespace std;
+
+// Function to perform exponential search
+// Parameters:
+// - number: the value to search for
+// - a: the sorted array to search within
+// - size: the size of the array
+// Returns:
+// - The index of the number if found, or -1 if not found
+int ExponentialSearch(int number, const int a[], int size) {
+    if (size == 0) return -1; // If the array is empty, return -1
+
+    // If the number is at the first position
+    if (a[0] == number) return 0;
+
+    // Find range for linear search by repeated doubling
+    int i = 1;
+    while (i < size && a[i] <= number) {
+        i *= 2;
+    }
+
+    // Perform linear search in the found range
+    for (int j = i / 2; j < min(i, size); ++j) {
+        if (a[j] == number) {
+            return j; // Number found, return the index
+        }
+    }
+
+    return -1; // Number not found, return -1
+}
+
+int main() {
+    int a[5] = { 1, 4, 6, 11, 30 }; // Example sorted array
+    // Number we are searching for is 11
+
+    // Call ExponentialSearch and store the result index
+    int index = ExponentialSearch(11, a, 5);
+
+    // Check if the number was found and print the appropriate message
+    if (index != -1) {
+        cout << "The index of number " << 11 << " is: " << index << endl;
+    }
+    else {
+        cout << "Number " << 11 << " not found." << endl;
+    }
+
+    return 0; // Indicate that the program ended successfully
+}

@@ -1,0 +1,62 @@
+Interpolation search is a search algorithm similar to binary search that estimates the position of the target element based on its value relative to the values at the ends of the search range
+
+
+#include <iostream>
+using namespace std;
+
+// Function to perform interpolation search
+// Parameters:
+// - number: the value to search for
+// - a: the sorted array to search within
+// - size: the size of the array
+// Returns:
+// - The index of the number if found, or -1 if not found
+int InterpSearch(int number, const int a[], int size) {
+    int low = 0, high = size - 1;
+
+    // Continue searching while the segment to search is valid and the number is within the range
+    while (low <= high && number >= a[low] && number <= a[high]) {
+        // Avoid division by zero
+        if (low == high) {
+            if (a[low] == number) return low;
+            return -1;
+        }
+
+        // Estimate the position using the interpolation formula
+        int pos = low + ((double)(high - low) / (a[high] - a[low]) * (number - a[low]));
+
+        // Check if the estimated position has the number we are searching for
+        if (a[pos] == number) {
+            return pos;
+        }
+
+        // If the number is larger, it can only be in the upper part of the array
+        if (a[pos] < number) {
+            low = pos + 1;
+        }
+        // If the number is smaller, it can only be in the lower part of the array
+        else {
+            high = pos - 1;
+        }
+    }
+    return -1; // Number not found, return -1
+}
+
+int main() {
+    int a[5] = { 1, 4, 6, 11, 30 }; // Example sorted array
+     // Number we are searching for is 11
+
+    // Call InterpolationSearch and store the result index
+    int index = InterpSearch(11, a, 5);
+
+    // Check if the number was found and print the appropriate message
+    if (index != -1) {
+        cout << "The index of number " << 11 << " is: " << index << endl;
+    }
+    else {
+        cout << "Number " << 11 << " not found." << endl;
+    }
+
+    return 0; // Indicate that the program ended successfully
+}
+

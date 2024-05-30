@@ -1,0 +1,40 @@
+Sequential search, is a basic algorithm to find a specific value within an input array or list, including numerical values.
+Linear search algorithms involve sequentially checking each element in the list until a match is found or the end of the list is reached.
+
+
+#include <iostream>
+using namespace std;
+
+// Function to perform sequential search
+// Parameters:
+// - number: the value to search for
+// - a: the array to search within (marked as const since it is not modified)
+// - size: the size of the array
+// Returns:
+// - The index of the number if found, or -1 if not found
+int SeqSearch(int number, const int a[], int size) {
+    // Iterate through the array to find the number
+    for (int i = 0; i < size; i++) {
+        if (number == a[i]) {
+            return i; // Return the index if the number is found
+        }
+    }
+    return -1; // Return -1 if the number is not found
+}
+
+int main() {
+    int a[5] = { 1, 4, 6, 11, 30 }; // Example array
+    int number_to_search = 5; // Number we are searching for
+    
+    // Call SeqSearch and store the result index
+    int index = SeqSearch(number_to_search, a, 5);
+    
+    // Check if the number was found and print the appropriate message
+    if (index != -1) {
+        cout << "The index of number " << number_to_search << " is: " << index << endl;
+    } else {
+        cout << "Number " << number_to_search << " not found." << endl;
+    }
+
+    return 0; // Indicate that the program ended successfully
+}
