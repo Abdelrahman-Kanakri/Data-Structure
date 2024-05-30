@@ -1,0 +1,106 @@
+#include <iostream>
+#include <cassert>
+using namespace std;
+
+class arrayQueueType {
+    int rear; // Index of the rear element
+    int front; // Index of the front element
+    int length; // Number of elements in the queue
+    int* arr; // Array to store queue elements
+    int maxSize; // Maximum size of the queue
+
+public:
+    arrayQueueType(int size) {
+        if (size <= 0)
+            maxSize = 100; // Default maximum size
+        else
+            maxSize = size;
+
+        front = 0; // Initialize front to 0
+        arr = new int[maxSize]; // Allocate memory for the array
+        rear = maxSize - 1; // Initialize rear to maxSize - 1
+        length = 0; // Initialize length to 0
+    }
+
+    int isEmpty() {
+        return length == 0; // Check if the queue is empty
+    }
+
+    bool isFull() {
+        return length == maxSize; // Check if the queue is full
+    }
+
+    void addQueue(int Element) {
+        if (isFull()) {
+            cout << "Queue Full Can't Enqueue ...!" << endl; // Display error message if queue is full
+        } else {
+            rear = (rear + 1) % maxSize; // Increment rear circularly
+            arr[rear] = Element; // Add Element to the rear of the queue
+            length++; // Increment the length of the queue
+        }
+    }
+
+    void deleteQueue() {
+        if (isEmpty()) {
+            cout << "Empty Queue Can't Dequeue ...!" << endl; // Display error message if queue is empty
+        } else {
+            front = (front + 1) % maxSize; // Increment front circularly
+            length--; // Decrement the length of the queue
+        }
+    }
+
+    int frontQueue() {
+        assert(!isEmpty()); // Ensure the queue is not empty
+        return arr[front]; // Return the element at the front of the queue
+    }
+
+    int rearQueue() {
+        assert(!isEmpty()); // Ensure the queue is not empty
+        return arr[rear]; // Return the element at the rear of the queue
+    }
+
+    void printQueue() {
+        if (!isEmpty()) {
+            for (size_t i = front; i != rear; i = (i + 1) % maxSize) {
+                cout << arr[i] << " "; // Print each element in the queue
+            }
+            cout << arr[rear]; // Print the rear element
+        } else {
+            cout << "Empty Queue"; // Display message if the queue is empty
+        }
+    }
+
+    int queueSearch(int element) {
+        int pos = -1;
+        if (isFull()) {
+            for (int i = front; i != rear; i = (i + 1) % maxSize) {
+                if (arr[i] == element) {
+                    pos = i; // Search for the element in the queue
+                    break;
+                }
+            }
+            if (pos == -1) {
+                if (arr[rear] == element)
+                    pos = rear; // Check if the rear element matches the search element
+            }
+        } else {
+            cout << "Queue is empty!" << endl; // Display message if the queue is empty
+        }
+        return pos; // Return the position of the element in the queue (-1 if not found)
+    }
+
+    ~arrayQueueType() {
+        delete[] arr; // Deallocate memory for the array
+    }
+};
+
+int main() {
+    arrayQueueType q1(5); // Create a queue with a maximum size of 5
+    q1.addQueue(10); // Enqueue elements
+    q1.addQueue(20);
+    q1.addQueue(30);
+    q1.addQueue(40);
+    q1.addQueue(50); // Queue is full, can't enqueue
+    q1.printQueue(); // Print the queue
+    return 0;
+}

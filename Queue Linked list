@@ -1,0 +1,121 @@
+#include <iostream>
+#include <cassert>
+using namespace std;
+
+// Node structure for the linked list
+class Node {
+public:
+    int data;
+    Node* next;
+};
+
+class LinkedListQueue {
+private:
+    Node* front; // Pointer to the front of the queue
+    Node* rear; // Pointer to the rear of the queue
+    int length; // Number of elements in the queue
+
+public:
+    LinkedListQueue() {
+        front = nullptr;
+        rear = nullptr;
+        length = 0;
+    }
+
+    // Function to check if the queue is empty
+    bool isEmpty() const {
+        return length == 0;
+    }
+
+    // Function to add an element to the queue
+    void addQueue(int element) {
+        Node* newNode = new Node;
+        newNode->data = element;
+        newNode->next = nullptr;
+
+        if (isEmpty()) {
+            front = newNode;
+            rear = newNode;
+        }
+        else {
+            rear->next = newNode;
+            rear = newNode;
+        }
+        length++;
+    }
+
+    // Function to delete an element from the queue
+    void deleteQueue() {
+        assert(!isEmpty());
+        Node* temp = front;
+        front = front->next;
+        delete temp;
+        length--;
+
+        if (isEmpty()) {
+            rear = nullptr;
+        }
+    }
+
+    // Function to get the front element of the queue
+    int Front() const {
+        assert(!isEmpty());
+        return front->data;
+    }
+
+    // Function to get the rear element of the queue
+    int Rear() const {
+        assert(!isEmpty());
+        return rear->data;
+    }
+
+    // Function to print the elements of the queue
+    void printQueue() const {
+        Node* current = front;
+        cout << "Queue: ";
+        while (current != nullptr) {
+            cout << current->data << " ";
+            current = current->next;
+        }
+        cout << endl;
+    }
+
+    // Function to get the size of the queue
+    int size() const {
+        return length;
+    }
+
+    // Destructor to deallocate memory
+    ~LinkedListQueue() {
+        while (!isEmpty()) {
+            deleteQueue();
+        }
+    }
+};
+
+int main() {
+    LinkedListQueue queue;
+
+    // Add elements to the queue
+    queue.addQueue(10);
+    queue.addQueue(20);
+    queue.addQueue(30);
+    queue.addQueue(40);
+
+    // Print the queue
+    queue.printQueue();
+
+    // Delete an element from the queue
+    queue.deleteQueue();
+
+    // Print the queue after deletion
+    queue.printQueue();
+
+    // Get the front element of the queue
+    cout << "Front element: " << queue.Front() << endl;
+
+    // Get the size of the queue
+    cout << "Queue size: " << queue.size() << endl;
+
+    return 0;
+}
