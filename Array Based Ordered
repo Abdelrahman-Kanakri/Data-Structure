@@ -1,0 +1,195 @@
+#include<iostream>
+#include<cassert>
+using namespace std;
+
+template<class elemType>
+class orderedArrayList {
+private:
+    elemType* array;
+    int maxSize;
+    int length;
+public:
+    orderedArrayList(int s = 10);  // Constructor
+    orderedArrayList(const orderedArrayList& otherList);  // Copy Constructor
+    ~orderedArrayList();  // Destructor
+
+    bool isFull();  // 1: Check if the list is full
+    bool isEmpty();  // 2: Check if the list is empty
+    void insert(elemType element);  // 3: Insert element in sorted order
+    void remove(elemType element);  // 4: Remove specific element
+    void removeAt(int pos);  // 5: Remove element at specific position
+    bool isItemEqual(int pos, elemType element);  // 6: Check if element at position matches
+    void replaceAt(int pos, elemType element);  // 7: Replace element at specific position
+    elemType retrieveAt(int pos);  // 8: Retrieve element at specific position
+    void clearList();  // 9: Clear the list
+    int seqSearch(elemType element);  // 10: Sequential search for element
+    elemType getElement(int pos);  // 11: Get element at specific position
+    int listSize();  // 12: Get current list size
+    int maxListSize();  // 13: Get maximum list size
+    void print();  // 14: Print all elements in the list
+};
+
+// Constructor
+template<class elemType>
+orderedArrayList<elemType>::orderedArrayList(int s) {
+    if (s < 10)
+        maxSize = 10;  // Set maxSize to 10 if s < 10
+    else
+        maxSize = s;
+    length = 0;
+    array = new elemType[maxSize];
+    assert(array != NULL);  // Ensure memory allocation was successful
+}
+
+// Copy Constructor
+template<class elemType>
+orderedArrayList<elemType>::orderedArrayList(const orderedArrayList& otherList) {
+    maxSize = otherList.maxSize;
+    length = otherList.length;
+    array = new elemType[maxSize];
+    assert(array != NULL);  // Ensure memory allocation was successful
+    for (int j = 0; j < length; j++) {
+        array[j] = otherList.array[j];
+    }
+}
+
+// Destructor
+template<class elemType>
+orderedArrayList<elemType>::~orderedArrayList() {
+    delete[] array;  // Free the allocated memory
+}
+
+// 1: Check if the list is full
+template<class elemType>
+bool orderedArrayList<elemType>::isFull() {
+    return length == maxSize;
+}
+
+// 2: Check if the list is empty
+template<class elemType>
+bool orderedArrayList<elemType>::isEmpty() {
+    return length == 0;
+}
+
+// 3: Insert element in sorted order
+template<class elemType>
+void orderedArrayList<elemType>::insert(elemType element) {
+    if (isFull())
+        cout << "The list is full" << endl;
+    else {
+        int i;
+        for (i = length - 1; (i >= 0 && array[i] > element); i--) {
+            array[i + 1] = array[i];
+        }
+        array[i + 1] = element;
+        length++;
+    }
+}
+
+// 4: Remove specific element
+template<class elemType>
+void orderedArrayList<elemType>::remove(elemType element) {
+    if (isEmpty())
+        cout << "Can't delete from empty list" << endl;
+    else {
+        int pos = seqSearch(element);
+        if (pos != -1)
+            removeAt(pos);
+        else
+            cout << "The element you want to delete is unavailable" << endl;
+    }
+}
+
+// 5: Remove element at specific position
+template<class elemType>
+void orderedArrayList<elemType>::removeAt(int pos) {
+    if (isEmpty())  // Ensure list is not empty
+        cout << "Can't remove from empty list" << endl;
+    else if (pos < 0 || pos >= length)
+        cout << "OUT OF RANGE!..." << endl;
+    else {
+        for (int i = pos; i < length - 1; i++) {
+            array[i] = array[i + 1];
+        }
+        length--;
+    }
+}
+
+// 6: Check if element at position matches
+template<class elemType>
+bool orderedArrayList<elemType>::isItemEqual(int pos, elemType element) {
+    return (array[pos] == element);
+}
+
+// 7: Replace element at specific position
+template<class elemType>
+void orderedArrayList<elemType>::replaceAt(int pos, elemType element) {
+    if (pos < 0 || pos >= length)
+        cout << "OUT OF RANGE!..." << endl;
+    else
+        array[pos] = element;
+}
+
+// 8: Retrieve element at specific position
+template<class elemType>
+elemType orderedArrayList<elemType>::retrieveAt(int pos) {
+    if (pos < 0 || pos >= length)
+        cout << "OUT OF RANGE!..." << endl;
+    else
+        return array[pos];
+}
+
+// 9: Clear the list
+template<class elemType>
+void orderedArrayList<elemType>::clearList() {
+    length = 0;
+}
+
+// 10: Sequential search for element
+template<class elemType>
+int orderedArrayList<elemType>::seqSearch(elemType element) {
+    for (int i = 0; i < length; i++) {
+        if (array[i] == element)
+            return i;
+    }
+    return -1;
+}
+
+// 11: Get element at specific position
+template<class elemType>
+elemType orderedArrayList<elemType>::getElement(int pos) {
+    if (pos < 0 || pos >= length)
+        cout << "OUT OF RANGE!..." << endl;
+    else
+        return array[pos];
+}
+
+// 12: Get current list size
+template<class elemType>
+int orderedArrayList<elemType>::listSize() {
+    return length;
+}
+
+// 13: Get maximum list size
+template<class elemType>
+int orderedArrayList<elemType>::maxListSize() {
+    return maxSize;
+}
+
+// 14: Print all elements in the list
+template<class elemType>
+void orderedArrayList<elemType>::print() {
+    for (int i = 0; i < length; i++) {
+        cout << array[i] << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    // Example usage
+    orderedArrayList<int> list(15);
+    list.insert(10);
+    list.insert(5);
+    list.insert(15);
+    list.print();  // Output: 5 10 15
+}

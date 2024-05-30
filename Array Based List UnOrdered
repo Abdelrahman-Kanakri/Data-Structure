@@ -1,0 +1,223 @@
+#include<iostream>
+#include<cassert>
+using namespace std;
+
+template<class elemType>
+class arrayList {
+private:
+    elemType* array;
+    int maxSize;
+    int length;
+public:
+    arrayList(int s = 10);  // Constructor
+    arrayList(const arrayList& otherList);  // Copy Constructor
+    ~arrayList();  // Destructor
+
+    bool isFull();  // 1: Check if the list is full
+    bool isEmpty();  // 2: Check if the list is empty
+    void insertAt(int pos, elemType element);  // 3: Insert element at specific position
+    void insertAtEnd(elemType element);  // 4: Insert element at the end
+    void insert(elemType element);  // 5: Insert element if not already present
+    void remove(elemType element);  // 6: Remove specific element
+    void removeAt(int pos);  // 7: Remove element at specific position
+    bool isItemEqual(int pos, elemType element);  // 8: Check if element at position matches
+    void replaceAt(int pos, elemType element);  // 9: Replace element at specific position
+    elemType retrieveAt(int pos);  // 10: Retrieve element at specific position
+    void clearList();  // 11: Clear the list
+    int seqSearch(elemType element);  // 12: Sequential search for element
+    elemType getElement(int pos);  // 13: Get element at specific position
+    int listSize();  // 14: Get current list size
+    int maxListSize();  // 15: Get maximum list size
+    void print();  // 16: Print all elements in the list
+};
+
+// Constructor
+template<class elemType>
+arrayList<elemType>::arrayList(int s) {
+    if (s < 10)
+        maxSize = 10;  // Set maxSize to 10 if s < 10
+    else
+        maxSize = s;
+    length = 0;
+    array = new elemType[maxSize];
+    assert(array != NULL);  // Ensure memory allocation was successful
+}
+
+// Copy Constructor
+template<class elemType>
+arrayList<elemType>::arrayList(const arrayList& otherList) {
+    maxSize = otherList.maxSize;
+    length = otherList.length;
+    array = new elemType[maxSize];
+    assert(array != NULL);  // Ensure memory allocation was successful
+    for (int j = 0; j < length; j++) {
+        array[j] = otherList.array[j];
+    }
+}
+
+// Destructor
+template<class elemType>
+arrayList<elemType>::~arrayList() {
+    delete[] array;  // Free the allocated memory
+}
+
+// 1: Check if the list is full
+template<class elemType>
+bool arrayList<elemType>::isFull() {
+    return length == maxSize;
+}
+
+// 2: Check if the list is empty
+template<class elemType>
+bool arrayList<elemType>::isEmpty() {
+    return length == 0;
+}
+
+// 3: Insert element at specific position
+template<class elemType>
+void arrayList<elemType>::insertAt(int pos, elemType element) {
+    if (isFull())
+        cout << "The list is full" << endl;
+    else if (pos < 0 || pos > length)
+        cout << "OUT OF RANGE!..." << endl;
+    else {
+        for (int i = length; i > pos; i--) {
+            array[i] = array[i - 1];
+        }
+        array[pos] = element;
+        length++;
+    }
+}
+
+// 4: Insert element at the end
+template<class elemType>
+void arrayList<elemType>::insertAtEnd(elemType element) {
+    if (isFull())
+        cout << "The list is full" << endl;
+    else
+        array[length++] = element;  // Insert element and increment length
+}
+
+// 5: Insert element if not already present
+template<class elemType>
+void arrayList<elemType>::insert(elemType element) {
+    if (length == 0)
+        array[length++] = element;
+    else if (length == maxSize)
+        cout << "The list is full" << endl;
+    else {
+        int pos = seqSearch(element);
+        if (pos == -1)
+            array[length++] = element;
+        else
+            cout << "The element is already in the list" << endl;
+    }
+}
+
+// 6: Remove specific element
+template<class elemType>
+void arrayList<elemType>::remove(elemType element) {
+    if (isEmpty())
+        cout << "Can't delete from empty list" << endl;
+    else {
+        int pos = seqSearch(element);
+        if (pos != -1)
+            removeAt(pos);
+        else
+            cout << "The element you want to delete is unavailable" << endl;
+    }
+}
+
+// 7: Remove element at specific position
+template<class elemType>
+void arrayList<elemType>::removeAt(int pos) {
+    if (isEmpty())  // Ensure list is not empty
+        cout << "Can't remove from empty list" << endl;
+    else if (pos < 0 || pos >= length)
+        cout << "OUT OF RANGE!..." << endl;
+    else {
+        for (int i = pos; i < length - 1; i++) {
+            array[i] = array[i + 1];
+        }
+        length--;
+    }
+}
+
+// 8: Check if element at position matches
+template<class elemType>
+bool arrayList<elemType>::isItemEqual(int pos, elemType element) {
+    return (array[pos] == element);
+}
+
+// 9: Replace element at specific position
+template<class elemType>
+void arrayList<elemType>::replaceAt(int pos, elemType element) {
+    if (pos < 0 || pos >= length)
+        cout << "OUT OF RANGE!..." << endl;
+    else
+        array[pos] = element;
+}
+
+// 10: Retrieve element at specific position
+template<class elemType>
+elemType arrayList<elemType>::retrieveAt(int pos) {
+    if (pos < 0 || pos >= length)
+        cout << "OUT OF RANGE!..." << endl;
+    else
+        return array[pos];
+}
+
+// 11: Clear the list
+template<class elemType>
+void arrayList<elemType>::clearList() {
+    length = 0;
+}
+
+// 12: Sequential search for element
+template<class elemType>
+int arrayList<elemType>::seqSearch(elemType element) {
+    for (int i = 0; i < length; i++) {
+        if (array[i] == element)
+            return i;
+    }
+    return -1;
+}
+
+// 13: Get element at specific position
+template<class elemType>
+elemType arrayList<elemType>::getElement(int pos) {
+    if (pos < 0 || pos >= length)
+        cout << "OUT OF RANGE!..." << endl;
+    else
+        return array[pos];
+}
+
+// 14: Get current list size
+template<class elemType>
+int arrayList<elemType>::listSize() {
+    return length;
+}
+
+// 15: Get maximum list size
+template<class elemType>
+int arrayList<elemType>::maxListSize() {
+    return maxSize;
+}
+
+// 16: Print all elements in the list
+template<class elemType>
+void arrayList<elemType>::print() {
+    for (int i = 0; i < length; i++) {
+        cout << array[i] << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    // Example usage
+    arrayList<int> list(15);
+    list.insertAtEnd(5);
+    list.insertAtEnd(10);
+    list.insertAtEnd(15);
+    list.print();  // Output: 5 10 15 
+}
