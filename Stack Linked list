@@ -1,0 +1,94 @@
+#include<iostream>
+using namespace std;
+
+template<class t>
+class Stack {
+private:
+    int counter; // To keep track of the number of elements in the stack
+    struct StackNode {
+        t item; // The data item stored in the node
+        StackNode* next; // Pointer to the next node in the stack
+    };
+    StackNode* stackTopPTr; // Pointer to the top of the stack
+    StackNode* curPtr; // Pointer used for traversing the stack
+
+public:
+    Stack() {
+        stackTopPTr = NULL; // Initialize the top pointer to NULL
+        counter = 0; // Initialize the counter to 0
+    }
+
+    bool isEmpty() {
+        return stackTopPTr == NULL; // Check if the stack is empty
+    }
+
+    void push(t newItem) {
+        StackNode* newPtr = new StackNode; // Allocate a new node
+        if (newPtr == NULL) {
+            cout << "Stack push cannot allocate memory"; // Check for memory allocation failure
+        } else {
+            newPtr->item = newItem; // Set the new node's item to newItem
+            newPtr->next = stackTopPTr; // Link the new node to the previous top
+            stackTopPTr = newPtr; // Update the top pointer
+            counter++; // Increment the counter
+        }
+    }
+
+    void pop() {
+        if (isEmpty()) {
+            cout << "Stack empty on pop"; // Check if the stack is empty
+        } else {
+            StackNode* temp = stackTopPTr; // Temporarily store the top node
+            stackTopPTr = stackTopPTr->next; // Move the top pointer to the next node
+            temp->next = NULL; // Disconnect the popped node from the stack
+            delete temp; // Deallocate the memory of the popped node
+            counter--; // Decrement the counter
+        }
+    }
+
+    void pop(t stackTop) {
+        if (isEmpty()) {
+            cout << "Stack empty on pop"; // Check if the stack is empty
+        } else {
+            stackTop = stackTopPTr->item; // Retrieve the item of the top node
+            StackNode* temp = stackTopPTr; // Temporarily store the top node
+            stackTopPTr = stackTopPTr->next; // Move the top pointer to the next node
+            temp->next = NULL; // Disconnect the popped node from the stack
+            delete temp; // Deallocate the memory of the popped node
+            counter--; // Decrement the counter
+        }
+    }
+
+    void getTop(t stackTop) {
+        if (isEmpty()) {
+            cout << "Stack empty on getTop"; // Check if the stack is empty
+        } else {
+            stackTop = stackTopPTr->item; // Retrieve the item of the top node
+        }
+        cout << "\nTop Element of the stack is " << stackTop; // Display the top element
+        cout << endl;
+    }
+
+    void display() {
+        curPtr = stackTopPTr; // Start from the top of the stack
+        cout << "Items in the stack : ";
+        cout << "[ ";
+        while (curPtr != NULL) {
+            cout << curPtr->item << " "; // Print each item
+            curPtr = curPtr->next; // Move to the next node
+        }
+        cout << " ]\n"; // Close the list display
+    }
+
+    int length() {
+        return counter; // Return the number of elements in the stack
+    }
+};
+
+int main() {
+    Stack<int> s; // Create a stack of integers
+    s.push(10); // Push 10 onto the stack
+    s.push(20); // Push 20 onto the stack
+    s.display(); // Display the stack contents
+    cout << s.length(); // Display the number of elements in the stack
+}
