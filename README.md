@@ -6,7 +6,7 @@ This is a repository that contain most Data structure algorithms as the followin
 * Array based list (Ordered/UnOrdered) Algorithm
 * linked list Single/Doubly (Ordered & UnOrdered) Algorithm
 * Stack Algorithm (Array Based/ Linked List)
-* Qeue Algorithm (Array Based/ Linked List)
+* Queue Algorithm (Array Based/ Linked List)
 * Search Algorithms (Sequntial/ Binary/ Exponential/ Interpolation)
 * Tree Algorithm
 * Graph Algorithm (BFS/ DFS/ Dijkstra/ Kruskal/ Prims)
