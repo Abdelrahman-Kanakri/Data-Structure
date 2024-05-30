@@ -1,0 +1,96 @@
+Merge Sort algorithm is one of two important divide-and-conquer sorting algorithms (the other one is quicksort).
+It is a recursive algorithm.
+In order to analyze the merge Sort function, we need to consider the two distinct processes that make up its implementation. 
+First, the list is split into halves. We already computed (in a binary search) that we can divide a list in half 𝐥𝐨𝐠⁡𝒏 times where 𝒏 is the length of the list. 
+The second process is the merge. Each item in the list will eventually be processed and placed on the sorted list. So the merge operation which results in a list of size 𝒏 requires 𝒏 operations. 
+
+
+#include <iostream>
+using namespace std;
+
+// Merges two subarrays of array[].
+// First subarray is arr[begin..mid]
+// Second subarray is arr[mid+1..end]
+void merge(int array[], int const left, int const mid, int const right) {
+    auto const subArrayOne = mid - left + 1;
+    auto const subArrayTwo = right - mid;
+
+    // Create temp arrays
+    auto* leftArray = new int[subArrayOne];
+    auto* rightArray = new int[subArrayTwo];
+
+    // Copy data to temp arrays leftArray[] and rightArray[]
+    for (auto i = 0; i < subArrayOne; i++) {
+        leftArray[i] = array[left + i];
+    }
+    for (auto j = 0; j < subArrayTwo; j++) {
+        rightArray[j] = array[mid + 1 + j];
+    }
+
+    auto indexOfSubArrayOne = 0; // Initial index of first sub-array
+    auto indexOfSubArrayTwo = 0; // Initial index of second sub-array
+    int indexofMergedArray = left; // Initial index of merged array
+
+    // Merge the temp arrays back into array[left..right]
+    while (indexOfSubArrayOne < subArrayOne && indexOfSubArrayTwo < subArrayTwo) {
+        if (leftArray[indexOfSubArrayOne] <= rightArray[indexOfSubArrayTwo]) {
+            array[indexofMergedArray] = leftArray[indexOfSubArrayOne];
+            indexOfSubArrayOne++;
+        }
+        else {
+            array[indexofMergedArray] = rightArray[indexOfSubArrayTwo];
+            indexOfSubArrayTwo++;
+        }
+        indexofMergedArray++;
+    }
+
+    // Copy the remaining elements of leftArray[], if there are any
+    while (indexOfSubArrayOne < subArrayOne) {
+        array[indexofMergedArray] = leftArray[indexOfSubArrayOne];
+        indexOfSubArrayOne++;
+        indexofMergedArray++;
+    }
+
+    // Copy the remaining elements of rightArray[], if there are any
+    while (indexOfSubArrayTwo < subArrayTwo) {
+        array[indexofMergedArray] = rightArray[indexOfSubArrayTwo];
+        indexOfSubArrayTwo++;
+        indexofMergedArray++;
+    }
+
+    delete[] leftArray;
+    delete[] rightArray;
+}
+
+// Function to perform merge sort
+void mergeSort(int array[], int const begin, int const end) {
+    if (begin >= end) return; // Returns recursively
+
+    auto mid = begin + (end - begin) / 2;
+    mergeSort(array, begin, mid);
+    mergeSort(array, mid + 1, end);
+    merge(array, begin, mid, end);
+}
+
+// Function to print an array
+void printArray(int A[], int size) {
+    for (auto i = 0; i < size; i++) {
+        cout << A[i] << " ";
+    }
+    cout << endl;
+}
+
+// Driver code
+int main() {
+    int arr[] = { 12, 11, 13, 5, 6, 7 };
+    auto sizeofArray = sizeof(arr) / sizeof(arr[0]);
+
+    cout << "Given array is \n";
+    printArray(arr, sizeofArray);
+
+    mergeSort(arr, 0, sizeofArray - 1);
+
+    cout << "Sorted array is \n";
+    printArray(arr, sizeofArray);
+    return 0;
+}

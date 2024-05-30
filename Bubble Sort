@@ -1,0 +1,41 @@
+The bubble sort makes multiple passes through a list. 
+It compares adjacent items and exchanges those that are out of order. Each pass through the list places the next largest value in its proper place
+
+
+#include <iostream>
+using namespace std;
+
+// A function to implement bubble sort
+void bubbleSort(int arr[], int sizeofArray) {
+    for (int i = 0; i < sizeofArray; i++) {
+        // Last i elements are already in place, so we iterate only till n-i-1
+        for (int j = 0; j < sizeofArray - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                swap(arr[j], arr[j + 1]);
+            }
+        }
+    }
+}
+
+// Function to print an array
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+// Driver code
+int main() {
+    int arr[] = { 5, 1, 4, 8, 2 };
+    int sizeofArray = sizeof(arr) / sizeof(arr[0]); // Calculate the size of the array
+
+    // Call bubbleSort to sort the array
+    bubbleSort(arr, sizeofArray);
+
+    cout << "Sorted array: \n";
+    // Call printArray to print the sorted array
+    printArray(arr, sizeofArray);
+
+    return 0;
+}

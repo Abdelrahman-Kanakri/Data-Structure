@@ -1,0 +1,53 @@
+The selection sort improves on the bubble sort by making only one exchange for every pass through the list.
+In order to do this, a selection sort looks for the largest value as it makes a pass and, after completing the pass, places it in the proper location
+
+
+
+#include <iostream>
+using namespace std;
+
+// Function to swap two elements
+void swap(int* xp, int* yp) {
+    int temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+}
+
+// Function to perform selection sort
+void selectionSort(int arr[], int sizeofArray) {
+    int i, j, min_idx;
+
+    // One by one move boundary of unsorted subarray
+    for (i = 0; i < sizeofArray - 1; i++) {
+        // Find the minimum element in unsorted array
+        min_idx = i;
+        for (j = i + 1; j < sizeofArray; j++) {
+            if (arr[j] < arr[min_idx]) {
+                min_idx = j;
+            }
+        }
+        // Swap the found minimum element with the first element
+        swap(&arr[min_idx], &arr[i]);
+    }
+}
+
+// Function to print an array
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+// Driver program to test above functions
+int main() {
+    int arr[] = { 64, 25, 12, 22, 11 };
+    int sizeofArray = sizeof(arr) / sizeof(arr[0]);
+
+    selectionSort(arr, sizeofArray);
+
+    cout << "Sorted array: \n";
+    printArray(arr, sizeofArray);
+
+    return 0;
+}

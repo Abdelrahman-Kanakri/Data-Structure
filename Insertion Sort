@@ -1,0 +1,45 @@
+Insertion sort is a simple sorting algorithm that is appropriate for small inputs. 
+The list is divided into two parts: sorted and unsorted. 
+In each pass, the first element of the unsorted part is picked up, transferred to the sorted sub-list, and inserted at the appropriate place. 
+
+
+#include <iostream>
+using namespace std;
+
+// Function to sort an array using insertion sort
+void insertionSort(int arr[], int sizeofArray) {
+    int i, key, j;
+    for (i = 1; i < sizeofArray; i++) {
+        key = arr[i];
+        j = i - 1;
+
+        // Move elements of arr[0..i-1], that are greater than key,
+        // to one position ahead of their current position
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+// A utility function to print an array of size n
+void printArray(int arr[], int sizeofArray) {
+    for (int i = 0; i < sizeofArray; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+// Driver code
+int main() {
+    int arr[] = { 12, 11, 13, 5, 6 };
+    int sizeofArray = sizeof(arr) / sizeof(arr[0]);
+
+    insertionSort(arr, sizeofArray);
+
+    cout << "Sorted array: \n";
+    printArray(arr, sizeofArray);
+
+    return 0;
+}
