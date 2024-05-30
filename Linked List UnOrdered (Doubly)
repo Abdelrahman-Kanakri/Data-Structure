@@ -1,0 +1,171 @@
+#include <iostream>
+#include <cassert>
+using namespace std;
+
+struct nodeType {
+    int info;
+    nodeType* next;
+    nodeType* back;
+};
+
+class DoublyLinkedList {
+public:
+    DoublyLinkedList(); // Default constructor
+    DoublyLinkedList(DoublyLinkedList& otherList); // Copy constructor
+    bool isEmptyList() const; // Check if the list is empty
+    void destroyList(); // Destroy the list
+    void initializelist(); // Initialize the list
+    int listsize() const; // Get the size of the list
+    int front() const; // Get the front element of the list
+    int back() const; // Get the back element of the list
+    void print() const; // Print the list
+    bool search(const int& searchItem) const; // Search for an item in the list
+    void reversePrint() const; // Print the list in reverse order
+    void insert(const int& newItem); // Insert an item into the list
+    void deleteNode(const int& deleteItem); // Delete an item from the list
+    ~DoublyLinkedList(); // Destructor
+protected:
+    nodeType* first; // Pointer to the first node
+    nodeType* last; // Pointer to the last node
+    int count; // Number of nodes in the list
+private:
+    void copyList(const DoublyLinkedList& otherList); // Copy list function
+};
+
+bool DoublyLinkedList::isEmptyList() const {
+    return (first == NULL); // Check if the list is empty
+}
+
+DoublyLinkedList::DoublyLinkedList() {
+    first = NULL;
+    last = NULL;
+    count = 0; // Initialize the list
+}
+
+void DoublyLinkedList::destroyList() {
+    nodeType* temp; // Pointer to deallocate memory
+    while (first != NULL) {
+        temp = first; // Set temp to the current node
+        first = first->next; // Advance first to the next node
+        delete temp; // Deallocate memory
+    }
+    last = NULL; // Initialize last to NULL
+    count = 0; // Reset count
+}
+
+void DoublyLinkedList::initializelist() {
+    destroyList(); // Destroy the list if it has any nodes
+}
+
+void DoublyLinkedList::print() const {
+    nodeType* current = first; // Pointer to traverse the list
+    while (current != NULL) {
+        cout << current->info << " "; // Print the node info
+        current = current->next; // Move to the next node
+    }
+    cout << endl; // Add newline after printing all elements
+}
+
+int DoublyLinkedList::listsize() const {
+    return count; // Return the number of nodes in the list
+}
+
+int DoublyLinkedList::front() const {
+    assert(first != NULL);
+    return first->info; // Return the info of the first node
+}
+
+int DoublyLinkedList::back() const {
+    assert(last != NULL);
+    return last->info; // Return the info of the last node
+}
+
+DoublyLinkedList::~DoublyLinkedList() {
+    destroyList(); // Destroy the list when the object is destroyed
+}
+
+bool DoublyLinkedList::search(const int& searchItem) const {
+    nodeType* current = first; // Pointer to traverse the list
+    while (current != NULL) {
+        if (current->info == searchItem) // Check if the current node contains the searchItem
+            return true; // Item found
+        current = current->next; // Move to the next node
+    }
+    return false; // Item not found
+}
+
+void DoublyLinkedList::reversePrint() const {
+    nodeType* current = last; // Pointer to traverse the list from the end
+    while (current != NULL) {
+        cout << current->info << " "; // Print the node info
+        current = current->back; // Move to the previous node
+    }
+    cout << endl; // Add newline after printing all elements
+}
+
+void DoublyLinkedList::insert(const int& newItem) {
+    nodeType* newNode = new nodeType; // Create a new node
+    newNode->info = newItem; // Set the node info
+    newNode->next = NULL; // Set the next pointer to NULL
+    newNode->back = last; // Set the back pointer to the current last node
+
+    if (first == NULL) { // If the list is empty
+        first = newNode;
+        last = newNode;
+    }
+    else {
+        last->next = newNode; // Link the new node to the last node
+        last = newNode; // Update the last pointer
+    }
+    count++; // Increment the count of nodes
+}
+
+void DoublyLinkedList::deleteNode(const int& deleteItem) {
+    nodeType* current = first; // Pointer to traverse the list
+
+    if (first == NULL) { // List is empty
+        cout << "Cannot delete from an empty list." << endl;
+        return;
+    }
+
+    // Traverse the list to find the node to delete
+    while (current != NULL && current->info != deleteItem) {
+        current = current->next;
+    }
+
+    if (current == NULL) { // Item not found
+        cout << "The item to be deleted is not in the list." << endl;
+        return;
+    }
+
+    if (current == first) { // Node to be deleted is the first node
+        first = first->next;
+        if (first != NULL)
+            first->back = NULL;
+        else
+            last = NULL; // List becomes empty if there was only one node
+    }
+    else if (current == last) { // Node to be deleted is the last node
+        last = last->back;
+        last->next = NULL;
+    }
+    else { // Node to be deleted is in the middle
+        current->back->next = current->next;
+        current->next->back = current->back;
+    }
+    delete current; // Delete the node
+    count--; // Decrement the count of nodes
+}
+
+int main() {
+    DoublyLinkedList l;
+    l.insert(5);
+    l.insert(7);
+    l.insert(1);
+    l.print();
+    l.reversePrint();
+    l.deleteNode(7);
+    l.print();
+    l.reversePrint();
+    return 0;
+}
